@@ -30,12 +30,12 @@ def pearson(x,y) :
 	return r
 
 # x,y의 start end 구간 사이의 correlation 값 구하기
-def pearson_for_sec(x,y,start,end) :	
-	n = end-start + 1
-	vals = range(start,end+1)#range(n) #st ~ st+m
+def pearson_for_sec(x,y,start_idx,end_idx) :	#0-2
+	n = end_idx-start_idx + 1 #3
+	vals = range(start_idx,end_idx+1)	#range(n) #start ~ end 	#0~2
 
 	#sum
-	sumx = sum([float(x[i]) for i in vals])
+	sumx = sum([float(x[i]) for i in vals]) #x[0]~x[2]
 	sumy = sum([float(y[i]) for i in vals])
 
 	#sum double
@@ -55,10 +55,11 @@ def pearson_for_sec(x,y,start,end) :
 	return r
 
 
+
 # x,y의 po 기준 으로 좌측의 n 구간의 correlation 값 구하기
-def corr_before_point(x,y,po,n) :
+def corr_before_point(x,y,po_idx,n) :
 	n = n
-	vals = range(po-n+1,po+1)
+	vals = range(po_idx-n,po_idx)
 
 	#sum
 	sumx = sum([float(x[i]) for i in vals])
@@ -81,9 +82,9 @@ def corr_before_point(x,y,po,n) :
 	return r
 
 # x,y의 po 기준 으로 우측의 n 구간의 correlation 값 구하기
-def corr_after_point(x,y,po,n) :
+def corr_after_point(x,y,po_idx,n) :
 	n = n
-	vals = range(po,po+n) 
+	vals = range(po_idx+1,po_idx+n+1) 
 
 	#sum
 	sumx = sum([float(x[i]) for i in vals])
@@ -105,10 +106,10 @@ def corr_after_point(x,y,po,n) :
 
 	return r
 
-# x,y의 po 기준 으로 좌측의 n 구간의 magnetometer 값 구하기
-def mag_before_point(x,y,po,n) :
+# x,y의 po 기준 으로 좌측의 n 구간의 magnetometer 값 구하기 # 그 점은 포함 안함
+def mag_before_point(x,y,po_idx,n) : 
 	n = n
-	vals = range(po-n+1,po+1)
+	vals = range(po_idx-n,po_idx) #po_idx-n~po_idx
 
 	#sum
 	sumx = sum([float(x[i]) for i in vals])
@@ -119,9 +120,9 @@ def mag_before_point(x,y,po,n) :
 	return avg
 
 # x,y의 po 기준 으로 좌측의 n 구간의 magnetometer 값 구하기
-def mag_after_point(x,y,po,n) :
+def mag_after_point(x,y,po_idx,n) :
 	n = n
-	vals = range(po,po+n) 
+	vals = range(po_idx+1,po_idx+n+1) #po_idx~po_idx+n-1
 
 	#sum
 	sumx = sum([float(x[i]) for i in vals])
@@ -131,9 +132,9 @@ def mag_after_point(x,y,po,n) :
 
 	return avg
 
-def mag_before_point_each(x,po,n) :
+def mag_before_point_each(x,po_idx,n) :
 	n = n
-	vals = range(po-n+1,po+1)
+	vals = range(po_idx-n+1,po_idx+1) #po_idx-n~po_idx
 
 	#sum
 	sumx = sum([float(x[i]) for i in vals])
@@ -141,11 +142,12 @@ def mag_before_point_each(x,po,n) :
 
 	avg=(sumx)/n
 
+
 	return avg
 
-def mag_after_point_each(x,po,n) :
+def mag_after_point_each(x,po_idx,n) :
 	n = n
-	vals = range(po,po+n) 
+	vals = range(po_idx,po_idx+n) 
 
 	#sum
 	sumx = sum([float(x[i]) for i in vals])
@@ -157,24 +159,24 @@ def mag_after_point_each(x,po,n) :
 
 
 #data 저장할 배열들
-x,y=[],[]
-x2,y2=[],[] 
-
+x,y=[],[]	#개수 real_en-real_st+1 # x 는 index
+x2,y2=[],[] #개수 real_en-real_st+1 
 
 #input
 total_st= 1	#total_index_start
-total_en= 346	#total_index_end
-real_st= 91#83	#real_index_start
-real_en= 270#278	#real_index_end
-out_p=	178	#out_point
+total_en= 852	#total_index_end
+real_st=  390#273	#real_index_start
+real_en= 556#673	#real_index_end
+out_p=	473	#out_point
 point_sec= 25	#section 길이 
 
+
 #tsv 읽고 그래프 그리기
-f = open('white_filname.tsv', 'r', encoding='utf-8')			
+f = open('log_sensors_white_test01.tsv', 'r', encoding='utf-8')			
 rdr = csv.reader(f, delimiter='\t')
 r = list(rdr)
 
-for num in range(real_st,real_en):		 
+for num in range(real_st,real_en+1):		#개수 real_en-real_st+1 
 	x.append(r[num][0])
 	y.append(r[num][21])
 
@@ -185,11 +187,11 @@ f.close()
 
 
 # tsv2 읽고 그래프그리기
-f = open('gold_filname.tsv', 'r', encoding='utf-8')
+f = open('log_sensors_gold_test01.tsv', 'r', encoding='utf-8')
 rdr = csv.reader(f, delimiter='\t')
 r = list(rdr)
 
-for num in range(real_st,real_en):		 
+for num in range(real_st,real_en+1): 	#개수 real_en-real_st+1 		 real_st가 index 0번임
 	x2.append(r[num][0])
 	y2.append(r[num][21])
 
@@ -211,15 +213,11 @@ plt.ylabel(u'magnetometer (uT)') #단위는 마이크로 테슬라
 
 
 print ("total correlation : ", pearson(y,y2))
-print ("correlation of inside  : ", pearson_for_sec(y,y2,1,out_p-real_st))
-print ("correlation of outside : ", pearson_for_sec(y,y2,out_p-real_st,real_en-real_st-1))
+print ("correlation of inside  : ", pearson_for_sec(y,y2,0,out_p-real_st+1)) #def pearson_for_sec(x,y,start_idx,end_idx)
+print ("correlation of outside : ", pearson_for_sec(y,y2,out_p-real_st,real_en-real_st))
 
-print ("correlation before point : ",corr_before_point(y,y2,out_p-real_st,point_sec))
-print ("correlation after point : ",corr_after_point(y,y2,out_p-real_st,point_sec))
-
-
-print ("magnetometer before point : ",mag_before_point(y,y2,out_p-real_st,point_sec))
-print ("magnetometer after point : ",mag_after_point(y,y2,out_p-real_st,point_sec))
+print ("correlation before point (25index) : ",corr_before_point(y,y2,out_p-real_st,point_sec))
+print ("correlation after point (25index) : ",corr_after_point(y,y2,out_p-real_st,point_sec))
 
 
 print ("magnetometer before point for S6white : ",mag_before_point_each(y,out_p-real_st,point_sec))

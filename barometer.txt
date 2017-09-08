@@ -1,1 +1,0 @@
-index	date	time	ms	accx	accy	accx	gyrox	gyroy	gyroz	gravx	gravy	gravz	linaccx	linaccy	linaccz	magx	magy	magz	revmagneticx	revmagneticy	revmagneticz	rotvecx	rotvecy	rotvecz	lightx	pressx	proxx
